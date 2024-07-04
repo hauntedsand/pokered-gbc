@@ -37,3 +37,15 @@ _PokemonMansionB1FDiaryText::
 	line "curb its vicious"
 	cont "tendencies..."
 	done
+
+_PokemonMansionB1FMewApproached::
+	text "A strange #MON"
+	line "hums playfully to"
+	cont "your song."
+	done
+
+_PokemonMansionB1FMewRan::
+	text "The strange #MON"
+	line "floated lazily"
+	cont "into the dark."
+	done

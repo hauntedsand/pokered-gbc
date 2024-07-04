@@ -474,8 +474,13 @@ ItemUseBall:
 	ld hl, wEnemyBattleStatus3
 	bit TRANSFORMED, [hl]
 	jr z, .notTransformed
-	ld a, DITTO
-	ld [wEnemyMonSpecies2], a
+; Mew knows Transform, making it the second Pokémon that you could capture in
+; a tranformed state (not accounting for the bug documented above). I don't
+; know if this will break anything subtle, but I also want a Mew today
+; and my first attempt got me a Ditto.
+;
+;	ld a, DITTO
+;	ld [wEnemyMonSpecies2], a
 	jr .skip6
 
 .notTransformed
@@ -1668,6 +1673,10 @@ ItemUseXStat:
 	ld [hl], a ; restore [wPlayerMoveNum]
 	ret
 
+; The PokeFlute logic has been extended to support attracting Mew and
+; triggering a battle encounter in PokemonMansionB1F (the basement of the
+; mansion ruins on Cinnabar Island used as the clandestine genetics lab).
+
 ItemUsePokeFlute:
 	ld a, [wIsInBattle]
 	and a
@@ -1689,7 +1698,7 @@ ItemUsePokeFlute:
 	ret
 .notRoute12
 	cp ROUTE_16
-	jr nz, .noSnorlaxToWakeUp
+	jr nz, .notRoute16
 	CheckEvent EVENT_BEAT_ROUTE16_SNORLAX
 	jr nz, .noSnorlaxToWakeUp
 ; if the player hasn't beaten Route 16 Snorlax
@@ -1699,6 +1708,19 @@ ItemUsePokeFlute:
 	ld hl, PlayedFluteHadEffectText
 	call PrintText
 	SetEvent EVENT_FIGHT_ROUTE16_SNORLAX
+	ret
+.notRoute16
+; Check whether the player is in the Cinnabar mansion basement
+	cp POKEMON_MANSION_B1F
+	jr nz, .noSnorlaxToWakeUp
+; Check whether the player has already captured Mew
+	CheckEvent EVENT_CAPTURED_POKEMONMANSIONB1F_MEW
+	jr nz, .noSnorlaxToWakeUp
+; Play the flute
+	ld hl, PlayedFluteHadEffectText
+	call PrintText
+; Trigger the encounter with Mew
+	SetEvent EVENT_ENCOUNTER_POKEMONMANSIONB1F_MEW
 	ret
 .noSnorlaxToWakeUp
 	ld hl, PlayedFluteNoEffectText

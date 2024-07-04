@@ -186,7 +186,12 @@
 	const EVENT_CINNABAR_GYM_GATE6_UNLOCKED
 	const_skip 40
 	const EVENT_GOT_TM35
-	const_skip 8
+; Cinnabar Island events for Mew encounters
+; Decremented the skip from 8 to 6 and sandwiched them in the free space
+	const_skip 6
+	const EVENT_ENCOUNTER_POKEMONMANSIONB1F_MEW
+	const EVENT_CAPTURED_POKEMONMANSIONB1F_MEW
+
 	const EVENT_GAVE_FOSSIL_TO_LAB
 	const EVENT_LAB_STILL_REVIVING_FOSSIL
 	const EVENT_LAB_HANDING_OVER_FOSSIL_MON
