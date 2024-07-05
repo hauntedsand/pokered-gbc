@@ -77,8 +77,8 @@ ItemUsePtrTable:
 	dw ItemUseDireHit    ; DIRE_HIT
 	dw UnusableItem      ; COIN
 	dw ItemUseMedicine   ; FRESH_WATER
-	dw ItemUseMedicine   ; SODA_POP
-	dw ItemUseMedicine   ; LEMONADE
+	dw ItemUseSoda       ; SODA_POP
+	dw ItemUseSoda       ; LEMONADE
 	dw UnusableItem      ; S_S_TICKET
 	dw UnusableItem      ; GOLD_TEETH
 	dw ItemUseXStat      ; X_ATTACK
@@ -801,6 +801,20 @@ ItemUseVitamin:
 	ld a, [wIsInBattle]
 	and a
 	jp nz, ItemUseNotTime
+
+ItemUseSoda:
+	ld a, [wIsInBattle]                   ; if not in battle, try to to evolve
+	and a
+	jp nz, .trySodaAsMedicine
+.trySodaAsEvoStone
+	call ItemUseEvoStone
+	ld a, [wActionResultOrTookBattleTurn] ; check whether the soda triggered an evolution
+	cp a, $1
+	jp nz, .return
+.trySodaAsMedicine
+	jp ItemUseMedicine                    ; otherwise try the soda as a medicine
+.return
+	ret
 
 ItemUseMedicine:
 	ld a, [wPartyCount]
