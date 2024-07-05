@@ -23,6 +23,12 @@ EvolveTradeMon:
 	cp "G"
 	jr z, .ok
 
+	; ALAKAZAM - just check if there's a Z where it should be
+	ld a, [wInGameTradeReceiveMonName + 5]
+	cp "Z"
+	jr z, .ok
+	ld a, [wInGameTradeReceiveMonName]
+
 	; "SPECTRE" (HAUNTER)
 	cp "S"
 	ret nz
